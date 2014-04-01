@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?><customization active="default">
+  <scheme id="default">
+    <modify path="toolbar/atoms" visible="false" row="0" index="0"/>
+    <modify path="toolbar/atoms/periodicSystem" visible="false"/>
+    <modify path="toolbar/atoms/atom.H" visible="false"/>
+    <modify path="toolbar/atoms/atom.C" visible="false"/>
+    <modify path="toolbar/atoms/atom.N" visible="false"/>
+    <modify path="toolbar/atoms/atom.O" visible="false"/>
+    <modify path="toolbar/atoms/atom.S" visible="false"/>
+    <modify path="toolbar/atoms/atom.F" visible="false"/>
+    <modify path="toolbar/atoms/atom.P" visible="false"/>
+    <modify path="toolbar/atoms/atom.Cl" visible="false"/>
+    <modify path="toolbar/atoms/atom.Br" visible="false"/>
+    <modify path="toolbar/atoms/atom.I" visible="false"/>
+    <modify path="toolbar/tools" row="0" index="0"/>
+    <modify path="toolbar/tools/bondGroup" visible="false"/>
+    <modify path="toolbar/tools/chainGroup" visible="false"/>
+    <modify path="toolbar/tools/boldMode" visible="false"/>
+    <modify path="toolbar/tools/hashedMode" visible="false"/>
+    <modify path="toolbar/tools/insertText" visible="false"/>
+    <modify path="toolbar/tools/reactionGroup" visible="false"/>
+    <modify path="toolbar/tools/createSGroup" visible="false"/>
+    <modify path="toolbar/tools/bracesGroup" visible="false"/>
+    <modify path="toolbar/tools/graphicsGroup" visible="false"/>
+    <add path="toolbar/tools">
+      <item id="lonePairGroup"/>
+      <item id="lonePair.lpN" visible="false"/>
+      <item id="radicalGroup"/>
+      <item id="freeRadicalGroup"/>
+    </add>
+    <order path="toolbar/tools" itemorder="bondGroup/chainGroup/boldMode/hashedMode/insertText/reactionGroup/createSGroup/bracesGroup/graphicsGroup/lonePairGroup/lonePair.lpN/radicalGroup/freeRadicalGroup/increaseCharge/decreaseCharge"/>
+    <remove path="toolbar/templates"/>
+    <modify path="toolbar/chemical" row="0"/>
+    <modify path="toolbar/markush" row="0"/>
+    <modify path="toolbar/mytemplates" visible="false" row="0" index="0"/>
+    <modify path="toolbar/general" row="0"/>
+    <modify path="toolbar/general/selectModeGroup" visible="false"/>
+    <modify path="toolbar/general/eraseMode" visible="false"/>
+    <modify path="toolbar/general/helpContents" visible="false"/>
+    <modify path="toolbar/general/transfer" visible="false"/>
+    <modify path="toolbar/general/cut" visible="false"/>
+    <modify path="toolbar/general/copy" visible="false"/>
+    <modify path="toolbar/general/paste" visible="false"/>
+    <modify path="toolbar/general/checkStructure" visible="false"/>
+    <modify path="toolbar/general/zoomIn" visible="false"/>
+    <modify path="toolbar/general/zoomOut" visible="false"/>
+    <modify path="toolbar/general/zoomTool" visible="false"/>
+    <modify path="toolbar/edit3D" row="0"/>
+  </scheme>
+</customization>
