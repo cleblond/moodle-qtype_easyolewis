@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -18,7 +17,7 @@
 /**
  * @package    qtype
  * @subpackage easyolewis
- * @copyright  2011 David Mudrak <david@moodle.com>
+ * @copyright  2014 onwards Carl LeBlond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -44,12 +43,12 @@ class moodle1_qtype_easyolewis_handler extends moodle1_qtype_handler {
      */
     public function process_question(array $data, array $raw) {
 
-        // convert and write the answers first
+        // Convert and write the answers first.
         if (isset($data['answers'])) {
             $this->write_answers($data['answers'], $this->pluginname);
         }
 
-        // convert and write the easyolewis extra fields
+        // Convert and write the easyolewis extra fields.
         foreach ($data['easyolewis'] as $easyolewis) {
             $easyolewis['id'] = $this->converter->get_nextid();
             $this->write_xml('easyolewis', $easyolewis, array('/easyolewis/id'));

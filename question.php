@@ -19,7 +19,7 @@
  *
  * @package    qtype
  * @subpackage easyolewis
- * @copyright  2011 The Open University
+ * @copyright  2014 onwards Carl LeBlond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,81 +28,33 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot . '/question/type/shortanswer/question.php');
 
-
-/**
- * Represents a easyolewis question.
- *
- * @copyright  1999 onwards Martin Dougiamas {@link http://moodle.com}
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class qtype_easyolewis_question extends qtype_shortanswer_question {
-	// all comparisons in easyolewis are case sensitive
-	public function compare_response_with_answer(array $response, question_answer $answer) {
-	global $DB;
-//	$question = $qa->get_question();
-//	$DB->get_field('question_answer', $return, array $conditions, $strictness=IGNORE_MISSING)
-//	echo "answer_id=".$answer->id;
-        $result = $DB->get_records('question_answers',array('id'=>$answer->id));
-//	$questiondata = question_bank::load_question($questionid);
-//	$id = optional_param('id', 0, PARAM_INT);
-//	echo "id=".$id;
-	
-//	print_r($result);
-	$question=$result[$answer->id]->question;
-//	echo "question=$question";
-	$qid=$result[$answer->id]->id;
-	$chargeorlonepairs=$DB->get_field('question_easyolewis', 'chargeorlonepairs', array('question'=>$question), $strictness=IGNORE_MISSING);
-//	 $result2 = $DB->get_records('question_easyolewis',array('question'=>$question));
-//	print_r($result2);
-	
-//	$chargeorlonepairs=$result2[]->chargeorlonepairs;
-//	echo "corlp=".$chargeorlonepairs;
+        // All comparisons in easyolewis are case sensitive!
+    public function compare_response_with_answer(array $response, question_answer $answer) {
+        global $DB;
+        $result = $DB->get_records('question_answers', array('id' => $answer->id));
+        $question = $result[$answer->id]->question;
+        $qid = $result[$answer->id]->id;
+        $chargeorlonepairs = $DB->get_field('question_easyolewis', 'chargeorlonepairs', array('question' => $question),
+        $strictness = IGNORE_MISSING);
 
-//	echo "chargeorlonepairs".$question->chargeorlonepairs; 
-        
-	if($chargeorlonepairs==0){
-//	echo "here";
-	$attribute="formalCharge";}
-	else{
-	$attribute="lonePair";}	
-	
+        if ($chargeorlonepairs == 0) {
+            $attribute = "formalCharge";
+        } else {
+            $attribute = "lonePair";
+        }
 
-        return self::compare_string_with_wildcard(self::get_xmlattribute($response['answer'], $attribute), self::get_xmlattribute($answer->answer, $attribute), false);
-//        return self::compare_string_with_wildcard($arrowsusrall, $arrowsansall, false);
-
-
+        return self::compare_string_with_wildcard(self::get_xmlattribute($response['answer'], $attribute),
+        self::get_xmlattribute($answer->answer, $attribute), false);
 
     }
-	
-	public function get_expected_data() {
 
+    public function get_expected_data() {
         return array('answer' => PARAM_RAW, 'easyolewis' => PARAM_RAW, 'mol' => PARAM_RAW);
     }
 
-
-
- 	public function get_xmlattribute($string, $attribute){
-	
-
-	$xml = simplexml_load_string($string);
-//	echo $xmlstring."nextto";
-	return $xml->MDocument[0]->MChemicalStruct[0]->molecule->atomArray[0][$attribute];
-//	echo "here";
-//	return $xml->saveXML();
-
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public function get_xmlattribute ($string, $attribute) {
+        $xml = simplexml_load_string($string);
+        return $xml->MDocument[0]->MChemicalStruct[0]->molecule->atomArray[0][$attribute];
+    }
 }

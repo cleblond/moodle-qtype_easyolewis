@@ -19,7 +19,7 @@
  *
  * @package    qtype
  * @subpackage easyolewis
- * @copyright  2009 The Open University
+ * @copyright  2014 onwards Carl LeBlond
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -27,40 +27,31 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-/**
- * Generates the output for easyolewis questions.
- *
- * @copyright  2009 The Open University
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
 class qtype_easyolewis_renderer extends qtype_renderer {
     public function formulation_and_controls(question_attempt $qa,
             question_display_options $options) {
-		global $CFG, $PAGE;
-		
+        global $CFG, $PAGE;
+
         $question = $qa->get_question();
-		
-		$questiontext = $question->format_questiontext($qa);
+        $questiontext = $question->format_questiontext($qa);
         $placeholder = false;
-	$myanswer_id = "my_answer".$qa->get_slot();
-	$correctanswer_id = "correct_answer".$qa->get_slot();
+        /*  Hack to show user/correct answers!
+        $myanswer_id = "my_answer".$qa->get_slot();
+        $correctanswer_id = "correct_answer".$qa->get_slot();  */
 
         if (preg_match('/_____+/', $questiontext, $matches)) {
             $placeholder = $matches[0];
         }
 
+        $result = '';
+        /*     Hack to add buttons for display user/correct answers
+        if ($options->readonly) {
+        $name2 = 'EASYOLEWIS'.$qa->get_slot();
+        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show My Response', 'onClick' => 'var s = document.getElementById("'.$myanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
+        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show Correct Answer', 'onClick' => 'var s = document.getElementById("'.$correctanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
+        $result .= html_writer::tag('BR', '', array());
 
-	$result='';
-	if ($options->readonly) {
-/*
-	$name2 = 'EASYOLEWIS'.$qa->get_slot();
-	$result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show My Response', 'onClick' => 'var s = document.getElementById("'.$myanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
-	$result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show Correct Answer', 'onClick' => 'var s = document.getElementById("'.$correctanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
-	$result .= html_writer::tag('BR', '', array());
-*/
-	}
-
-
+        }  */
 
         $toreplaceid = 'applet'.$qa->get_slot();
         $toreplace = html_writer::tag('span',
@@ -79,18 +70,10 @@ class qtype_easyolewis_renderer extends qtype_renderer {
 
         $result .= html_writer::tag('div', $questiontext, array('class' => 'qtext'));
 
-
-
-/////crl
-//$result .= html_writer::tag('textarea', "every page here");
-
-
         if (!$placeholder) {
             $answerlabel = html_writer::tag('span', get_string('answer', 'qtype_easyolewis', ''),
                                             array('class' => 'answerlabel'));
             $result .= html_writer::tag('div', $answerlabel.$toreplace, array('class' => 'ablock'));
-
-
         }
 
         if ($qa->get_state() == question_state::$invalid) {
@@ -98,128 +81,55 @@ class qtype_easyolewis_renderer extends qtype_renderer {
             $result .= html_writer::nonempty_tag('div',
                                                 $question->get_validation_error($lastresponse),
                                                 array('class' => 'validationerror'));
- 
+        }
 
-       }
+        if (!$options->readonly) {
+                $question = $qa->get_question();
+                $answer = $question->get_matching_answer($question->get_correct_response());
 
-////crl add answer to page////// 
+            if ($question->chargeorlonepairs == 0) {
+                $strippedxml  = $this->remove_xmlattribute($answer->answer, 'formalCharge');
+            } else {
+                $strippedxml  = $this->remove_xmlattribute($answer->answer, 'lonePair');
+                $strippedxml  = $this->remove_xmlattribute($strippedxml , 'radical');
+            }
 
-	if (!$options->readonly) {
-		$question = $qa->get_question();
-		$answer = $question->get_matching_answer($question->get_correct_response());
+            $strippedanswerid = "stripped_answer".$qa->get_slot();
+            $result .= html_writer::tag('textarea', $strippedxml,
+            array('id' => $strippedanswerid, 'style' => 'display:none;', 'name' => $strippedanswerid));
+        }
 
+        if ($options->readonly) {
+            $currentanswer = $qa->get_last_qt_var('answer');
+            $strippedanswerid = "stripped_answer".$qa->get_slot();
+            $result .= html_writer::tag('textarea', $currentanswer,
+            array('id' => $strippedanswerid, 'style' => 'display:none;', 'name' => $strippedanswerid));
+            $strippedxml = $currentanswer;
+            $answer = $question->get_matching_answer($question->get_correct_response());
 
-//		echo "chargeorlonepairs=".$question->chargeorlonepairs;
-
-                if($question->chargeorlonepairs==0){
-		$stripped_xml=$this->remove_xmlattribute($answer->answer,'formalCharge');}
-		else{
-		$stripped_xml=$this->remove_xmlattribute($answer->answer,'lonePair');
-		$stripped_xml=$this->remove_xmlattribute($stripped_xml,'radical');
-		}
-
-		$stripped_answer_id="stripped_answer".$qa->get_slot();
-		$result .= html_writer::tag('textarea', $stripped_xml, array('id' => $stripped_answer_id, 'style' => 'display:none;', 'name' => $stripped_answer_id));
-	}
-/////
-
-		
-		if ($options->readonly) {
-		    $currentanswer = $qa->get_last_qt_var('answer');
-		$stripped_answer_id="stripped_answer".$qa->get_slot();
-		$result .= html_writer::tag('textarea', $currentanswer, array('id' => $stripped_answer_id, 'style' => 'display:none;', 'name' => $stripped_answer_id));
-
-		$stripped_xml=$currentanswer;
-//	echo "HEREEEEE";
-		    
-///hides current response
-//$result .= html_writer::tag('div', get_string('youranswer', 'qtype_easyolewis', s($qa->get_last_qt_var('answer'))), array('class' => 'qtext'));
-
-$answer = $question->get_matching_answer($question->get_correct_response());
-
-///buttons to show correct and user answers
-		$result .= html_writer::tag('textarea', $qa->get_last_qt_var('answer'), array('id' => $myanswer_id, 'name' => $myanswer_id, 'style' => 'display:none;'));
-
-		$result .= html_writer::tag('textarea', $answer->answer, array('id' => $correctanswer_id, 'name' => $correctanswer_id, 'style' => 'display:none;'));
-
-
-
-		}
+            /* Buttons to show correct and user answers currently disabled!
+            $result .= html_writer::tag('textarea', $qa->get_last_qt_var('answer'), array('id' => $myanswer_id, 'name' => $myanswer_id, 'style' => 'display:none;'));
+            $result .= html_writer::tag('textarea', $answer->answer, array('id' => $correctanswer_id, 'name' => $correctanswer_id, 'style' => 'display:none;'));
+            */
+        }
 
         $result .= html_writer::tag('div',
                                     $this->hidden_fields($qa),
                                     array('class' => 'inputcontrol'));
-
-       $this->require_js($toreplaceid, $qa, $options->readonly, $options->correctness, $CFG->qtype_easyolewis_options, $stripped_xml);
-/*
-	$config = 'msketch_name = "MSketch"; 
-	msketch_begin(\'../../../marvin\', 520, 460); 
-	msketch_param(\'menuconfig\', \'configuration.xml\'); 
-	msketch_end();';
-
-	$appletid = 'easyolewis'.$qa->get_slot();
-
-
-	$result .= "<script type='text/javascript'>//<![CDATA[
-		YUI().applyConfig({ 
-                modules: { 
-                    'qtype_easyolewis': {  
-                        fullpath: M.cfg.wwwroot + '/marvin/marvin.js',
-			fullpath: M.cfg.wwwroot + '/jquery-1.8.2/jquery-1.8.2.js' 
-                    }  
-                }  
-            });//]]></script>";
-	  
- 	$result .= "<script type='text/javascript'>//<![CDATA[
-	YUI().use('qtype_easyolewis', function (Y) {
-	});
-	Y.on('load', function () {
-	$('".$appletid."').html(alert('here'));
-        });//]]>
-</script>";
-*/
-
-
-
-//       $this->require_jsnew($toreplaceid, $qa, $options->readonly, $options->correctness, $CFG->qtype_easyolewis_options);
-
-
-
-
-
+        $this->require_js($toreplaceid, $qa, $options->readonly, $options->correctness,
+        $CFG->qtype_easyolewis_options, $strippedxml );
         return $result;
     }
 
+    protected function remove_xmlattribute($xmlstring, $attribute) {
+        $xml = simplexml_load_string($xmlstring);
+        unset($xml->MDocument[0]->MChemicalStruct[0]->molecule->atomArray[0][$attribute]);
+        return $xml->saveXML();
+    }
 
 
-
-
-
-protected function remove_xmlattribute($xmlstring, $attribute){
-	$xml = simplexml_load_string($xmlstring);
-//echo $xmlstring."nextto";
-	unset($xml->MDocument[0]->MChemicalStruct[0]->molecule->atomArray[0][$attribute]);
-//echo "here";
-	return $xml->saveXML();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    protected function require_js($toreplaceid, question_attempt $qa, $readonly, $correctness, $appletoptions, $stripped_xml) {
+    protected function require_js($toreplaceid, question_attempt $qa, $readonly, $correctness, $appletoptions, $strippedxml ) {
         global $PAGE;
-
-
 
         $jsmodule = array(
             'name'     => 'qtype_easyolewis',
@@ -238,7 +148,7 @@ protected function remove_xmlattribute($xmlstring, $attribute){
         }
         $name = 'EASYOLEWIS'.$qa->get_slot();
         $appletid = 'easyolewis'.$qa->get_slot();
-	$stripped_answer_id="stripped_answer".$qa->get_slot();
+        $strippedanswerid = "stripped_answer".$qa->get_slot();
         $PAGE->requires->js_init_call('M.qtype_easyolewis.insert_easyolewis_applet',
                                       array($toreplaceid,
                                             $name,
@@ -248,21 +158,9 @@ protected function remove_xmlattribute($xmlstring, $attribute){
                                             $feedbackimage,
                                             $readonly,
                                             $appletoptions,
-					    $stripped_answer_id, $stripped_xml),
+                                            $strippedanswerid, $strippedxml ),
                                       false,
                                       $jsmodule);
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     protected function fraction_for_last_response(question_attempt $qa) {
@@ -306,21 +204,14 @@ protected function remove_xmlattribute($xmlstring, $attribute){
 
     public function correct_response(question_attempt $qa) {
         $question = $qa->get_question();
-
         $answer = $question->get_matching_answer($question->get_correct_response());
         if (!$answer) {
             return '';
         }
-
-//        return get_string('correctansweris', 'qtype_easyolewis', s($answer->answer));
-//        return get_string('correctansweris', 'qtype_easyolewis', s($answer->answer));
-
-
     }
 
     protected function hidden_fields(question_attempt $qa) {
         $question = $qa->get_question();
-
         $hiddenfieldshtml = '';
         $inputids = new stdClass();
         $responsefields = array_keys($question->get_expected_data());
