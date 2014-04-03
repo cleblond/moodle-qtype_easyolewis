@@ -9,7 +9,7 @@ M.qtype_easyolewis={
 
 	},
 
-    insert_applet : function(){
+    insert_applet : function(Y, moodleurl){
 
 	var warningspan = document.getElementById('appletdiv');
         warningspan.innerHTML = '';
@@ -37,7 +37,7 @@ M.qtype_easyolewis={
 
 	var param=document.createElement('param');
 	param.name='menuconfig';
-        param.value='../eolms/question/type/easyolewis/customization_mech_instructor.xml';
+        param.value = moodleurl + '/question/type/easyolewis/customization_mech_instructor.xml';
 	newApplet.appendChild(param);
 
 	var param=document.createElement('param');
@@ -64,6 +64,10 @@ M.qtype_easyolewis={
         param.value='true';
 	newApplet.appendChild(param);
 
+	var param=document.createElement('param');
+	param.name='lonePairsVisible';
+        param.value='true';
+	newApplet.appendChild(param);
 
 	var param=document.createElement('param');
 	param.name='lonePairsAutoCalc';

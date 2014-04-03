@@ -4,79 +4,30 @@
 
 M.qtype_easyolewis={
     insert_easyolewis_applet : function(Y, toreplaceid, appletid, name, topnode,
-                                                                    appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml){
-        var javaparams = ['mol', Y.one(topnode+' input.mol').get('value')];   ///CRL changed smiles to mol
-//        var javaparams = new Array();
+                                                                    appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml, moodleurl){
+        var javaparams = ['mol', Y.one(topnode+' input.mol').get('value')];
         var easyolewisoptions = new Array();
-
-
-	
-//	alert(strippedxml);
-
-
         if (appletoptions) {
             easyolewisoptions[easyolewisoptions.length] = appletoptions;
-
-
-
         }
         if (readonly) {
-//            easyolewisoptions[easyolewisoptions.length] = "false";  ///crl changed depict to true
-//	     javaparams.menubar = "false";	    
-//            easyolewisoptions[easyolewisoptions.length + 1] = "false";  ///crl changed depict to true
-//	    easyolewisoptions[easyolewisoptions.length] = Y.one(topnode+' input.mol').get('value');  ///crl changed depict to true
 	    easyolewisoptions[easyolewisoptions.length] = Y.one(topnode+' input.mol').get('value');  ///crl 
-
-
-
-
         }
         if (easyolewisoptions.length !== 0) {
-//            javaparams[javaparams.length] = "viewonly";   ///crl changes options to viewonly
-//            javaparams[javaparams.length+1] = "menubar";   ///crl changes options to viewonly 
   	    javaparams[javaparams.length] = "mrv";  ///added by crl
-
             javaparams[javaparams.length] = easyolewisoptions.join(',');
         }
         if (!this.show_java(toreplaceid, appletid, name, appleturl,
-                                                            520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id)) {
-
-
-	
+                                                            520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id, moodleurl)) {
             this.show_error(Y, topnode);
-
-
         } else {
-//		window.alert('Message goes here');
-//		           var s = 'CC';
-//		alert(stripped_answer_id);
-//		var s = document.getElementById(stripped_answer_id).value;
-//		document.Msketch.setMol(s);
-//worked		document.MSketch.setMol(s, 'mrv');
-//		this.find_java_applet(name).setMol(s, 'mrv');
-
-//		alert(appletid);
-//		setTimeout(function() {document.getElementById(appletid).setMol(s, 'mrv');},100)
-
-
 		var inputdiv = Y.one(topnode);
             	inputdiv.ancestor('form').on('submit', function (){
-//		var s = this.find_java_applet(name).getMol("mol");
-/*
-//    var s = document.MSketch.getMol(format);
-                Y.one(topnode+' input.answer').set('value', this.find_java_applet(name).smiles()); */
                 Y.one(topnode+' input.answer').set('value', this.find_java_applet(name).getMol("mrv"));
-
-//		 Y.one(topnode+' input.answer').set('value', this.find_java_applet(name).getMol("smiles"));
-                 
-//		var s = this.find_java_applet(name).getMol("mol");
-//		s = local2unix(s);
-
 		var strvalue = "" + this.find_java_applet(name).getMol("mrv");
 		var v = navigator.appVersion;
 		if(v.indexOf("Win") > 0) {
 			strvalue = strvalue.split("\r\n").join("\n"); // To avoid "\r\r\n"
-		//return strvalue.split("\n").join("\r\n");
 		} else { // Unix
 		//	return strvalue;
 		}
@@ -85,38 +36,9 @@ M.qtype_easyolewis={
 
                  Y.one(topnode+' input.mol').set('value', strvalue);
 
-
-//		var s = this.find_java_applet(name).getMol("mol");
-//		s = unix2local(s); // Convert "\n" to local line separator
-//                Y.one(topnode+' input.easyolewis').set('value', s);
-//                Y.one(topnode+' input.mol').set('value', s)
             }, this);
         }
     },
-
-
-
-/*
-local2unix : function (s) {
-    var strvalue = "" + s;
-    var v = navigator.appVersion;
-    if(v.indexOf("Win") > 0) {
-        return strvalue.split("\r").join("");
-    } else if(v.indexOf("Mac") > 0) { // Macintosh
-        return strvalue.split("\r").join("\n");
-    } else { // Unix
-        return strvalue;
-    }
-}
-*/
-
-
-
-
-
-
-
-
 
     show_error : function (Y, topnode) {
         var errormessage = '<span class ="javawarning">'
@@ -141,7 +63,7 @@ local2unix : function (s) {
     doneie6focus : 0,
     doneie6focusapplets : 0,
  // Note: This method is also called from mod/audiorecorder
-    show_java : function (id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id) {
+    show_java : function (id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id, moodleurl) {
         if (this.javainstalled == -99 ) {
             this.javainstalled = PluginDetect.isMinVersion(
                 'Java', 1.5, 'plugindetect.getjavainfo.jar', [0, 2, 0]) == 1;
@@ -161,64 +83,26 @@ local2unix : function (s) {
         newApplet.mayScript = true;     
 	newApplet.id = appletid;
 	newApplet.setAttribute('codebase','/marvin');
-//	newApplet.setAttribute('codebase_lookup','false');
-//	newApplet.setAttribute('NAME','MSketch');
-//	newApplet.setAttribute('menubar','false');
-//	newApplet.setAttribute('menuconfig','../eolms/question/type/easyolewis/customization_lewis.xml');
-//	newApplet.setAttribute('bondDraggedAlong','false');
-//	newApplet.setAttribute('defaultTool','electronFlow2');
-//	newApplet.setAttribute('valenceErrorVisible','false');
-//	newApplet.setAttribute('lonePairsAutoCalc','false');
-//	newApplet.setAttribute('lonePairsVisible','false');
-//	newApplet.setAttribute('chargeWithCircle','true');
-//	newApplet.setAttribute('valenceCheckEnabled','false');
-//	newApplet.setAttribute('valencePropertyVisible','false');
-//	newApplet.setAttribute('implicitH','off');
-//	newApplet.setAttribute('sketchCarbonVisibility','on');
-//	newApplet.setAttribute('defaultTool','increaseCharge');
-//	newApplet.setAttribute('msketch_mayscript','true');
-//	alert(strippedxml);
-//	newApplet.setAttribute('mol', 'cc');
-//msketch_mayscript=true;
-
-
-
-//	param.name='codebase';
-//        param.value='marvin';
-//	newApplet.appendChild(param);
-
-/*
-var param=document.createElement('param');
-	param.name='codebase_lookup';
-        param.value='false';
-	newApplet.appendChild(param);
-
-*/
-
 
 var param=document.createElement('param');
 	param.name='java_arguments';
         param.value='-Djnlp.packEnabled=true';
 	newApplet.appendChild(param);
 
-
 var param=document.createElement('param');
 	param.name='menubar';
         param.value='false';
 	newApplet.appendChild(param);
-
 
 var param=document.createElement('param');
 	param.name='rendering';
         param.value='wireframe';
 	newApplet.appendChild(param);
 
-
 var param=document.createElement('param');
 	param.name='menuconfig';
-        param.value='../eolms/question/type/easyolewis/customization_lewis.xml';
+        param.value = moodleurl + '/question/type/easyolewis/customization_lewis.xml';
 	newApplet.appendChild(param);
-
 
 var param=document.createElement('param');
 	param.setAttribute('bondDraggedAlong','false');
@@ -249,7 +133,6 @@ var param=document.createElement('param');
         param.value='false';
 	newApplet.appendChild(param);
 
-
 var param=document.createElement('param');
 	param.name='implicitH';
         param.value='off';
@@ -266,34 +149,15 @@ var param=document.createElement('param');
         param.value='increaseCharge';
 	newApplet.appendChild(param);
 
-
-
 var param=document.createElement('param');
 	param.name='mol';
         param.value=encodeURIComponent(document.getElementById(stripped_answer_id).value);
 	newApplet.appendChild(param);
 
-
 var param=document.createElement('param');
 	param.name='chargeWithCircle';
         param.value='true';
 	newApplet.appendChild(param);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         // In case applet supports the focushack system, we
         // pass in its id as a parameter.
@@ -305,44 +169,11 @@ var param=document.createElement('param');
             param.value=javavars[i+1];
             newApplet.appendChild(param);
         }
-/*            param.name='viewonly';
-            param.value='false';
-	    param.name='menubar';
-            param.value='false';
-*/
+
 	    param.name='mol';
             param.value = document.getElementById(stripped_answer_id).value;
 
 
-
-
-//        var script = document.createElement("script");
-//	script.type  = "text/javascript";
-//    	alert('here');
-//	script.setAttribute('src','alert(\'here\');');
-//	script.text = 'alert("here");';
-
-/*
- script.text ='YUI().applyConfig({ \
-                modules: { \
-                    \'external-marvin\': {  \
-                        fullpath: M.cfg.wwwroot + \'/marvin/marvin.js\'  \
-                    }  \
-                }  \
-            });  \
- 	YUI().use(\'external-marvin\', \'node-base\', function (Y) {  \
-	msketch_name = \"MSketch\"; \
-	msketch_begin(\"../../../marvin\", 520, 460); \
-	msketch_param(\"menuconfig\", \"configuration.xml\"); \
-	msketch_end(); \
-    });\ ';
-
-
-
-//        warningspan.appendChild(script);
-*/
-
-//	alert('write applet to page');
         warningspan.appendChild(newApplet);
 
 

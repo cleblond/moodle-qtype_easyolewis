@@ -129,7 +129,7 @@ class qtype_easyolewis_renderer extends qtype_renderer {
 
 
     protected function require_js($toreplaceid, question_attempt $qa, $readonly, $correctness, $appletoptions, $strippedxml ) {
-        global $PAGE;
+        global $PAGE, $CFG;
 
         $jsmodule = array(
             'name'     => 'qtype_easyolewis',
@@ -158,7 +158,7 @@ class qtype_easyolewis_renderer extends qtype_renderer {
                                             $feedbackimage,
                                             $readonly,
                                             $appletoptions,
-                                            $strippedanswerid, $strippedxml ),
+                                            $strippedanswerid, $strippedxml, $CFG->wwwroot),
                                       false,
                                       $jsmodule);
     }

@@ -75,7 +75,7 @@ class qtype_easyolewis_edit_form extends qtype_shortanswer_edit_form {
         );
 
         $PAGE->requires->js_init_call('M.qtype_easyolewis.insert_applet',
-                                      array(),
+                                      array($CFG->wwwroot),
                                       true,
                                       $jsmodule);
 
