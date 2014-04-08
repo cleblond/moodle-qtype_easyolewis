@@ -64,6 +64,9 @@ class qtype_easyolewis_edit_form extends qtype_shortanswer_edit_form {
         $mform->addElement('html', html_writer::end_tag('div'));
         $mform->addElement('html', html_writer::empty_tag('br'));
 
+        $marvinconfig = get_config('qtype_easyolewis_options');
+	$marvinpath = $marvinconfig->path;
+
         // Add applet to page!
         $jsmodule = array(
             'name'     => 'qtype_easyolewis',
@@ -75,7 +78,7 @@ class qtype_easyolewis_edit_form extends qtype_shortanswer_edit_form {
         );
 
         $PAGE->requires->js_init_call('M.qtype_easyolewis.insert_applet',
-                                      array($CFG->wwwroot),
+                                      array($CFG->wwwroot, $marvinpath),
                                       true,
                                       $jsmodule);
 

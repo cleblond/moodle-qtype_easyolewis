@@ -1,8 +1,6 @@
   Moodle 2.3 plugin: EasyOChem Marvinsketch Lewis Structure and Charge question type
 
-  Based on Moodle integration script written by Dan Stowell
-
-  Modifications for Marvinsketch and Reactio arrows by Carl LeBlond
+  by Carl LeBlond
 
 
 INSTALLATION:

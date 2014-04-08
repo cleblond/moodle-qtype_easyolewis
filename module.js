@@ -4,7 +4,7 @@
 
 M.qtype_easyolewis={
     insert_easyolewis_applet : function(Y, toreplaceid, appletid, name, topnode,
-                                                                    appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml, moodleurl){
+                                                                    appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml, moodleurl, marvinpath){
         var javaparams = ['mol', Y.one(topnode+' input.mol').get('value')];
         var easyolewisoptions = new Array();
         if (appletoptions) {
@@ -18,7 +18,7 @@ M.qtype_easyolewis={
             javaparams[javaparams.length] = easyolewisoptions.join(',');
         }
         if (!this.show_java(toreplaceid, appletid, name, appleturl,
-                                                            520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id, moodleurl)) {
+                                                            520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id, moodleurl, marvinpath)) {
             this.show_error(Y, topnode);
         } else {
 		var inputdiv = Y.one(topnode);
@@ -63,7 +63,7 @@ M.qtype_easyolewis={
     doneie6focus : 0,
     doneie6focusapplets : 0,
  // Note: This method is also called from mod/audiorecorder
-    show_java : function (id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id, moodleurl) {
+    show_java : function (id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id, moodleurl, marvinpath) {
         if (this.javainstalled == -99 ) {
             this.javainstalled = PluginDetect.isMinVersion(
                 'Java', 1.5, 'plugindetect.getjavainfo.jar', [0, 2, 0]) == 1;
@@ -82,7 +82,7 @@ M.qtype_easyolewis={
         newApplet.tabIndex = -1; // Not directly tabbable
         newApplet.mayScript = true;     
 	newApplet.id = appletid;
-	newApplet.setAttribute('codebase','/marvin');
+	newApplet.setAttribute('codebase', marvinpath);
 
 var param=document.createElement('param');
 	param.name='java_arguments';

@@ -131,6 +131,9 @@ class qtype_easyolewis_renderer extends qtype_renderer {
     protected function require_js($toreplaceid, question_attempt $qa, $readonly, $correctness, $appletoptions, $strippedxml ) {
         global $PAGE, $CFG;
 
+        $marvinconfig = get_config('qtype_easyolewis_options');
+	$marvinpath = $marvinconfig->path;
+
         $jsmodule = array(
             'name'     => 'qtype_easyolewis',
             'fullpath' => '/question/type/easyolewis/module.js',
@@ -158,7 +161,7 @@ class qtype_easyolewis_renderer extends qtype_renderer {
                                             $feedbackimage,
                                             $readonly,
                                             $appletoptions,
-                                            $strippedanswerid, $strippedxml, $CFG->wwwroot),
+                                            $strippedanswerid, $strippedxml, $CFG->wwwroot, $marvinpath),
                                       false,
                                       $jsmodule);
     }

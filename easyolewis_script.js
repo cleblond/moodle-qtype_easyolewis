@@ -9,7 +9,7 @@ M.qtype_easyolewis={
 
 	},
 
-    insert_applet : function(Y, moodleurl){
+    insert_applet : function(Y, moodleurl, marvinpath){
 
 	var warningspan = document.getElementById('appletdiv');
         warningspan.innerHTML = '';
@@ -23,7 +23,7 @@ M.qtype_easyolewis={
         newApplet.tabIndex = -1; // Not directly tabbable
         newApplet.mayScript = true;     
 	newApplet.id = 'MSketch';
-	newApplet.setAttribute('codebase','/marvin');
+	newApplet.setAttribute('codebase', marvinpath);
 
 	var param=document.createElement('param');
 	param.name='codebase_lookup';

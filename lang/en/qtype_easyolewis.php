@@ -39,10 +39,10 @@ $string['pluginname_link'] = 'question/type/easyolewis';
 $string['pluginnameadding'] = 'Adding a Lewis Structure question';
 $string['pluginnameediting'] = 'Editing a Lewis Structure question';
 $string['pluginnamesummary'] = 'Student must provide electrons (pairs or radicals) or charges to atoms in molecule which you predefine.  You can ask questions such as:<ul><li>Given the following Lewis structure, provide the correct atomic charges where needed?</li><li>Provide the proper charges on any atoms requiring it in the following Lewis structure?</li><li>Show all lone pair or radical electrons required to satisfy the charge on any atoms?</li></ul>';
-$string['easyolewis_options'] = 'Marvinsketch Applet options';
+$string['easyolewis_options'] = 'Path to Marvin Applet installation';
 $string['enablejava'] = 'Tried but failed to load Marvinsketch editor. You have not got a JAVA runtime environment working in your browser. You will need one to attempt this question.';
 $string['enablejavaandjavascript'] = 'Loading Marvinsketch editor.... If this message does not get replaced by the Marvin editor then you have not got javascript and a JAVA runtime environment working in your browser.';
-$string['configeasyolewisoptions'] = 'Comma separated list of Marvinsketch applet options (see <a href="http://www.chemaxon.com">list of available options</a>)';
+$string['configeasyolewisoptions'] = 'The path of your marvin installation relative to your web root.  (e.g. If your moodle is installed at /var/www/moodle and you install your marvin at /var/www/marvin then you should use the default /marvin)';
 $string['filloutoneanswer'] = '<b><ul>
 <li>Choose whether you want charge or lone pair/radical electron problem.</li>
 <li>Draw a complete structure(s) including all electrons and charges in the applet below.  <b>Note:  You must explicitly show all hydrogen atoms.</b></li>
