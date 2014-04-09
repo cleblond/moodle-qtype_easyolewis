@@ -1,8 +1,7 @@
-M.qtype_easyolewis={
+M.qtype_easyolewis = {
     insert_structure_into_applet : function(){
 		var textfieldid = 'id_answer_0';
 		if(document.getElementById(textfieldid).value != '') {
-		
 		var s = document.getElementById(textfieldid).value;
 		document.MSketch.setMol(s, 'mrv');
 		}
@@ -15,63 +14,63 @@ M.qtype_easyolewis={
         warningspan.innerHTML = '';
 
         var newApplet = document.createElement("applet");
-        newApplet.code='chemaxon.marvin.applet.JMSketchLaunch';
-        newApplet.archive='appletlaunch.jar';
-        newApplet.name='MSketch';
-        newApplet.width='650';
-        newApplet.height='460';
+        newApplet.code = 'chemaxon.marvin.applet.JMSketchLaunch';
+        newApplet.archive = 'appletlaunch.jar';
+        newApplet.name = 'MSketch';
+        newApplet.width = '650';
+        newApplet.height = '460';
         newApplet.tabIndex = -1; // Not directly tabbable
-        newApplet.mayScript = true;     
+        newApplet.mayScript = true;
 	newApplet.id = 'MSketch';
 	newApplet.setAttribute('codebase', marvinpath);
 
-	var param=document.createElement('param');
-	param.name='codebase_lookup';
-        param.value='false';
+	var param = document.createElement('param');
+	param.name = 'codebase_lookup';
+        param.value = 'false';
 	newApplet.appendChild(param);
 
-        var param=document.createElement('param');
-	param.name='implicitH';
-        param.value='off';
+        var param = document.createElement('param');
+	param.name = 'implicitH';
+        param.value = 'off';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='menuconfig';
+	var param = document.createElement('param');
+	param.name = 'menuconfig';
         param.value = moodleurl + '/question/type/easyolewis/customization_mech_instructor.xml';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
+	var param = document.createElement('param');
 	param.setAttribute('lonePairsVisible','true');
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='valenceCheckEnabled';
-        param.value='false';
+	var param = document.createElement('param');
+	param.name = 'valenceCheckEnabled';
+        param.value = 'false';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='valencePropertyVisible';
-        param.value='false';
+	var param = document.createElement('param');
+	param.name = 'valencePropertyVisible';
+        param.value = 'false';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='rendering';
-        param.value='wireframe';
+	var param = document.createElement('param');
+	param.name = 'rendering';
+        param.value = 'wireframe';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='chargeWithCircle';
-        param.value='true';
+	var param = document.createElement('param');
+	param.name = 'chargeWithCircle';
+        param.value = 'true';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='lonePairsVisible';
-        param.value='true';
+	var param = document.createElement('param');
+	param.name = 'lonePairsVisible';
+        param.value = 'true';
 	newApplet.appendChild(param);
 
-	var param=document.createElement('param');
-	param.name='lonePairsAutoCalc';
-        param.value='false';
+	var param = document.createElement('param');
+	param.name = 'lonePairsAutoCalc';
+        param.value = 'false';
 	newApplet.appendChild(param);
 
         warningspan.appendChild(newApplet);

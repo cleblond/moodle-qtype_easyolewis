@@ -47,10 +47,13 @@ class qtype_easyolewis_renderer extends qtype_renderer {
         /*     Hack to add buttons for display user/correct answers
         if ($options->readonly) {
         $name2 = 'EASYOLEWIS'.$qa->get_slot();
-        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show My Response', 'onClick' => 'var s = document.getElementById("'.$myanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
-        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show Correct Answer', 'onClick' => 'var s = document.getElementById("'.$correctanswer_id.'").value; document.getElementById("'.$name2.'").setMol(s, "mrv");'));
+        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show My Response',
+        'onClick' => 'var s = document.getElementById("'.$myanswer_id.'").value;
+        document.getElementById("'.$name2.'").setMol(s, "mrv");'));
+        $result .= html_writer::tag('input', '', array('type' => 'button','value' => 'Show Correct Answer',
+        'onClick' => 'var s = document.getElementById("'.$correctanswer_id.'").value;
+        document.getElementById("'.$name2.'").setMol(s, "mrv");'));
         $result .= html_writer::tag('BR', '', array());
-
         }  */
 
         $toreplaceid = 'applet'.$qa->get_slot();
@@ -132,7 +135,7 @@ class qtype_easyolewis_renderer extends qtype_renderer {
         global $PAGE, $CFG;
 
         $marvinconfig = get_config('qtype_easyolewis_options');
-	$marvinpath = $marvinconfig->path;
+        $marvinpath = $marvinconfig->path;
 
         $jsmodule = array(
             'name'     => 'qtype_easyolewis',
