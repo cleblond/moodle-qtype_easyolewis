@@ -33,7 +33,6 @@ class qtype_easyolewis_edit_form extends qtype_shortanswer_edit_form {
     protected function definition_inner($mform) {
         global $PAGE, $CFG;
 
-        $PAGE->requires->js('/question/type/easyolewis/easyolewis_script.js');
         $PAGE->requires->css('/question/type/easyolewis/easyolewis_styles.css');
         $mform->addElement('hidden', 'usecase', 1);
         $mform->setType('usecase', PARAM_INT);
@@ -68,34 +67,32 @@ class qtype_easyolewis_edit_form extends qtype_shortanswer_edit_form {
         $marvinpath = $marvinconfig->path;
 
         // Add applet to page!
-        $jsmodule = array(
+/*        $jsmodule = array(
             'name'     => 'qtype_easyolewis',
             'fullpath' => '/question/type/easyolewis/easyolewis_script.js',
             'requires' => array(),
             'strings' => array(
                 array('enablejava', 'qtype_easyolewis')
             )
-        );
+        ); */
 
         $PAGE->requires->js_init_call('M.qtype_easyolewis.insert_applet',
                                       array($CFG->wwwroot, $marvinpath),
-                                      true,
-                                      $jsmodule);
+                                      true);
 
         // Add structure to applet.
-        $jsmodule = array(
+       /* $jsmodule = array(
             'name'     => 'qtype_easyolewis',
             'fullpath' => '/question/type/easyolewis/easyolewis_script.js',
             'requires' => array(),
             'strings' => array(
                 array('enablejava', 'qtype_easyolewis')
             )
-        );
+        );*/
 
         $PAGE->requires->js_init_call('M.qtype_easyolewis.insert_structure_into_applet',
                                       array(),
-                                      true,
-                                      $jsmodule);
+                                      true);
 
         $this->add_per_answer_fields($mform, get_string('answerno', 'qtype_easyolewis', '{no}'),
                 question_bank::fraction_options());

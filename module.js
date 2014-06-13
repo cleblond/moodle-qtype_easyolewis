@@ -3,51 +3,44 @@
 
 
 M.qtype_easyolewis = {
-    insert_easyolewis_applet : function(Y, toreplaceid, appletid, name, topnode,
-                                                                    appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml, moodleurl, marvinpath){
+    insert_easyolewis_applet: function(Y, toreplaceid, appletid, name, topnode, appleturl, feedback, readonly, appletoptions, stripped_answer_id, strippedxml, moodleurl, marvinpath) {
         var javaparams = ['mol', Y.one(topnode + ' input.mol').get('value')];
         var easyolewisoptions = new Array();
         if (appletoptions) {
             easyolewisoptions[easyolewisoptions.length] = appletoptions;
         }
         if (readonly) {
-	    easyolewisoptions[easyolewisoptions.length] = Y.one(topnode + ' input.mol').get('value');
+            easyolewisoptions[easyolewisoptions.length] = Y.one(topnode + ' input.mol').get('value');
         }
         if (easyolewisoptions.length !== 0) {
-  	    javaparams[javaparams.length] = "mrv";
+            javaparams[javaparams.length] = "mrv";
             javaparams[javaparams.length] = easyolewisoptions.join(',');
         }
-        if (!this.show_java(toreplaceid, appletid, name, appleturl,
-                                                            520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id, moodleurl, marvinpath)) {
+        if (!this.show_java(toreplaceid, appletid, name, appleturl, 520, 460, 'chemaxon.marvin.applet.JMSketchLaunch', javaparams, stripped_answer_id, moodleurl, marvinpath)) {
             this.show_error(Y, topnode);
         } else {
-		var inputdiv = Y.one(topnode);
-            	inputdiv.ancestor('form').on('submit', function (){
+            var inputdiv = Y.one(topnode);
+            inputdiv.ancestor('form').on('submit', function() {
                 Y.one(topnode + ' input.answer').set('value', this.find_java_applet(name).getMol("mrv"));
-		var strvalue = "" + this.find_java_applet(name).getMol("mrv");
-		var v = navigator.appVersion;
-		if(v.indexOf("Win") > 0) {
-			strvalue = strvalue.split("\r\n").join("\n");
-		} else { // Unix
-		//	return strvalue;
-		}
-
-                 Y.one(topnode + ' input.mol').set('value', strvalue);
-
+                var strvalue = "" + this.find_java_applet(name).getMol("mrv");
+                var v = navigator.appVersion;
+                if (v.indexOf("Win") > 0) {
+                    strvalue = strvalue.split("\r\n").join("\n");
+                } else { // Unix
+                    //	return strvalue;
+                }
+                Y.one(topnode + ' input.mol').set('value', strvalue);
             }, this);
         }
     },
-
-    show_error : function (Y, topnode) {
-        var errormessage = '<span class ="javawarning">'
-            +M.util.get_string('enablejava', 'qtype_easyolewis')+
-            '</span>';
-        Y.one(topnode+ ' .ablock').insert(errormessage, 1);
+    show_error: function(Y, topnode) {
+        var errormessage = '<span class ="javawarning">' + M.util.get_string('enablejava', 'qtype_easyolewis') + '</span>';
+        Y.one(topnode + ' .ablock').insert(errormessage, 1);
     },
     /**
      * Gets around problem in ie6 using name
      */
-    find_java_applet : function (appletname) {
+    find_java_applet: function(appletname) {
         for (appletno in document.applets) {
             if (document.applets[appletno].name == appletname) {
                 return document.applets[appletno];
@@ -55,16 +48,14 @@ M.qtype_easyolewis = {
         }
         return null;
     },
-
-    nextappletid : 1,
-    javainstalled : -99,
-    doneie6focus : 0,
-    doneie6focusapplets : 0,
- // Note: This method is also called from mod/audiorecorder
-    show_java : function (id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id, moodleurl, marvinpath) {
-        if (this.javainstalled == -99 ) {
-            this.javainstalled = PluginDetect.isMinVersion(
-                'Java', 1.5, 'plugindetect.getjavainfo.jar', [0, 2, 0]) == 1;
+    nextappletid: 1,
+    javainstalled: -99,
+    doneie6focus: 0,
+    doneie6focusapplets: 0,
+    // Note: This method is also called from mod/audiorecorder
+    show_java: function(id, appletid, name, java, width, height, appletclass, javavars, stripped_answer_id, moodleurl, marvinpath) {
+        if (this.javainstalled == -99) {
+            this.javainstalled = PluginDetect.isMinVersion('Java', 1.5, 'plugindetect.getjavainfo.jar', [0, 2, 0]) == 1;
         }
         var warningspan = document.getElementById(id);
         warningspan.innerHTML = '';
@@ -78,130 +69,184 @@ M.qtype_easyolewis = {
         newApplet.width = width;
         newApplet.height = height;
         newApplet.tabIndex = -1; // Not directly tabbable
-        newApplet.mayScript = true;     
-	newApplet.id = appletid;
-	newApplet.setAttribute('codebase', marvinpath);
-
-var param = document.createElement('param');
-	param.name = 'java_arguments';
+        newApplet.mayScript = true;
+        newApplet.id = appletid;
+        newApplet.setAttribute('codebase', marvinpath);
+        var param = document.createElement('param');
+        param.name = 'java_arguments';
         param.value = '-Djnlp.packEnabled=true';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'menubar';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'menubar';
         param.value = 'false';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'rendering';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'rendering';
         param.value = 'wireframe';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'menuconfig';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'menuconfig';
         param.value = moodleurl + '/question/type/easyolewis/customization_lewis.xml';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.setAttribute('bondDraggedAlong','false');
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'valenceErrorVisible';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.setAttribute('bondDraggedAlong', 'false');
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'valenceErrorVisible';
         param.value = 'false';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'lonePairsAutoCalc';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'lonePairsAutoCalc';
         param.value = 'false';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'lonePairsVisible';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'lonePairsVisible';
         param.value = 'true';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'valenceCheckEnabled';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'valenceCheckEnabled';
         param.value = 'false';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'valencePropertyVisible';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'valencePropertyVisible';
         param.value = 'false';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'implicitH';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'implicitH';
         param.value = 'off';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'sketchCarbonVisibility';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'sketchCarbonVisibility';
         param.value = 'on';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'defaultTool';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'defaultTool';
         param.value = 'increaseCharge';
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'mol';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'mol';
         param.value = encodeURIComponent(document.getElementById(stripped_answer_id).value);
-	newApplet.appendChild(param);
-
-var param = document.createElement('param');
-	param.name = 'chargeWithCircle';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'chargeWithCircle';
         param.value = 'true';
-	newApplet.appendChild(param);
-
+        newApplet.appendChild(param);
         // In case applet supports the focushack system, we
         // pass in its id as a parameter.
         javavars[javavars.length] = 'focushackid';
         javavars[javavars.length] = newApplet.id;
-        for (var i=0; i<javavars.length; i+=2) {
-            var param=document.createElement('param');
-            param.name=javavars[i];
-            param.value=javavars[i+1];
+        for (var i = 0; i < javavars.length; i += 2) {
+            var param = document.createElement('param');
+            param.name = javavars[i];
+            param.value = javavars[i + 1];
             newApplet.appendChild(param);
         }
-
-	    param.name='mol';
-            param.value = document.getElementById(stripped_answer_id).value;
-
-
+        param.name = 'mol';
+        param.value = document.getElementById(stripped_answer_id).value;
         warningspan.appendChild(newApplet);
-
-
-
-        if(document.body.className.indexOf('ie6')!=-1 && !this.doneie6focus) {
+        if (document.body.className.indexOf('ie6') != -1 && !this.doneie6focus) {
             var fixFocus = function() {
-                if(document.activeElement && document.activeElement.nodeName.toLowerCase()=='applet') {
-                    setTimeout(fixFocus, 100);
-                    this.doneie6focus = 1;
-                    this.doneie6focusapplets ++;
-                    window.focus();
-                } else {
-                    this.doneie6focus++;
-                    if(this.doneie6focus == 2 && this.doneie6focusapplets > 0) {
-                        // Focus one extra time after applet gets it
-                        window.focus();
-                    }
-                    if(this.doneie6focus < 50) {
+                    if (document.activeElement && document.activeElement.nodeName.toLowerCase() == 'applet') {
                         setTimeout(fixFocus, 100);
+                        this.doneie6focus = 1;
+                        this.doneie6focusapplets++;
+                        window.focus();
+                    } else {
+                        this.doneie6focus++;
+                        if (this.doneie6focus == 2 && this.doneie6focusapplets > 0) {
+                            // Focus one extra time after applet gets it
+                            window.focus();
+                        }
+                        if (this.doneie6focus < 50) {
+                            setTimeout(fixFocus, 100);
+                        }
                     }
-                }
-            };
+                };
             window.arghApplets = 0;
             setTimeout(fixFocus, 100);
-            this.doneie6focus=1;
+            this.doneie6focus = 1;
         }
         return true;
+    },
+    insert_structure_into_applet: function() {
+        var textfieldid = 'id_answer_0';
+        if (document.getElementById(textfieldid).value != '') {
+            var s = document.getElementById(textfieldid).value;
+            document.MSketch.setMol(s, 'mrv');
+        }
+    },
+    insert_applet: function(Y, moodleurl, marvinpath) {
+        var warningspan = document.getElementById('appletdiv');
+        warningspan.innerHTML = '';
+        var newApplet = document.createElement("applet");
+        newApplet.code = 'chemaxon.marvin.applet.JMSketchLaunch';
+        newApplet.archive = 'appletlaunch.jar';
+        newApplet.name = 'MSketch';
+        newApplet.width = '650';
+        newApplet.height = '460';
+        newApplet.tabIndex = -1; // Not directly tabbable
+        newApplet.mayScript = true;
+        newApplet.id = 'MSketch';
+        newApplet.setAttribute('codebase', marvinpath);
+        var param = document.createElement('param');
+        param.name = 'codebase_lookup';
+        param.value = 'false';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'implicitH';
+        param.value = 'off';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'menuconfig';
+        param.value = moodleurl + '/question/type/easyolewis/customization_mech_instructor.xml';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.setAttribute('lonePairsVisible', 'true');
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'valenceCheckEnabled';
+        param.value = 'false';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'valencePropertyVisible';
+        param.value = 'false';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'rendering';
+        param.value = 'wireframe';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'chargeWithCircle';
+        param.value = 'true';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'lonePairsVisible';
+        param.value = 'true';
+        newApplet.appendChild(param);
+        var param = document.createElement('param');
+        param.name = 'lonePairsAutoCalc';
+        param.value = 'false';
+        newApplet.appendChild(param);
+        warningspan.appendChild(newApplet);
     }
 }
-
-
-
-
-
+M.qtype_easyolewis.init_getanswerstring = function(Y, moodle_version) {
+    var handleSuccess = function(o) {};
+    var handleFailure = function(o) { /*failure handler code*/
+        };
+    var callback = {
+        success: handleSuccess,
+        failure: handleFailure
+    };
+    if (moodle_version >= 2012120300) { //Moodle 2.4 or higher
+        YAHOO = Y.YUI2;
+    }
+    Y.all(".id_insert").each(function(node) {
+        node.on("click", function() {
+            var buttonid = node.getAttribute('id');
+            var s = document.MSketch.getMol('mrv');
+            textfieldid = 'id_answer_' + buttonid.substr(buttonid.length - 1);
+            document.getElementById(textfieldid).value = s;
+        });
+    });
+};
